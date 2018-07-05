@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>原生JS实现图片轮播</title>
+</head>
+<body>
+<style type="text/css">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#container {
+		position: relative;
+		width: 300px;
+		height: 200px;
+		margin: 50px auto;
+		overflow: hidden;
+		cursor: pointer;
+	}
+	ul {
+		position: absolute;
+		list-style-type: none;
+		font-size: 0;
+		width: 1500px;
+	}
+	#pic li {
+		display: inline-block;
+	}
+	#pic li img{
+		width: 300px;
+		height: 200px;
+	}
+	#prev {
+		position: absolute;
+		width: 16px;
+		height: 32px;
+		background: url(./img/slide-l.png);
+		top: calc(50% - 16px);
+		left: 10px;
+	}
+	#prev:hover {
+		background: url(./img/slide-l-hover.png);
+	}
+	#next {
+		position: absolute;
+		width: 16px;
+		height: 32px;
+		position: absolute;
+		background: url(./img/slide-r.png);
+		top: calc(50% - 16px);
+		right: 10px;
+	}
+	#next:hover {
+		background: url(./img/slide-r-hover.png);
+	}
+</style>
+	<div id="container">
+		<ul id="pic" style="left: -300px;">
+			<li><img src="./img/pic3.jpg" /></li>
+			<li><img src="./img/pic1.jpg" /></li>
+			<li><img src="./img/pic2.jpg" /></li>
+			<li><img src="./img/pic3.jpg" /></li>
+			<li><img src="./img/pic1.jpg" /></li>
+		</ul>
+		<a id="prev" href="javascript:void(0)"></a>
+		<a id="next" href="javascript:void(0)"></a>
+	</div>
+	<script>
+		window.onload = function() {
+			var container = document.getElementById("container");
+			var pic = document.getElementById("pic");
+			var prev = document.getElementById("prev");
+			var next = document.getElementById("next");
+			// 实现左右按钮，向前向后
+			function animate(offset) {
+				var newleft = parseInt(pic.style.left) + offset;
+				if (newleft < -900) {
+					newleft = -300;
+				}
+				if (newleft > -300) {
+					newleft = -900;
+				}
+				pic.style.left = newleft + "px";
+			}
+
+			prev.onclick = function() {
+				animate(300);
+			};
+			next.onclick = function() {
+				animate(-300);
+			};
+
+			// 实现自动播放
+			var timer;
+			function play() {
+				timer = setInterval(function() {
+					prev.onclick();
+				}, 1000);
+			}
+			function stop() {
+				clearInterval(timer);
+			}
+			container.onmouseover = stop;
+			container.onmouseout = play;
+		}
+	</script>
+</body>
+</html>
